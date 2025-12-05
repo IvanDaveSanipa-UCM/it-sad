@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Ticketing System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚌 Bus Ticketing System</h1>
+            <p>Fast, Convenient, and Reliable Ticket Booking</p>
+        </div>
+
+        <div id="loginSection" class="content">
+            <div class="login-container">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #667eea;">Login / Register</h2>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter password">
+                </div>
+                <div class="form-group">
+                    <label>User Type</label>
+                    <select id="userType">
+                        <option value="passenger">Passenger</option>
+                        <option value="admin">Administrator</option>
+                        <option value="conductor">Conductor</option>
+                        <option value="operator">Bus Operator</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="login()">Login</button>
+                <button class="btn btn-success" style="width: 100%;" onclick="register()">Register New Account</button>
+                <div id="loginMessage" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <div id="mainSection" style="display: none;">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showSection('booking')">Book Ticket</button>
+                <button class="nav-tab" onclick="showSection('myBookings')">My Bookings</button>
+                <button class="nav-tab" onclick="showSection('schedule')">Bus Schedule</button>
+                <button class="nav-tab" id="adminTab" style="display: none;" onclick="showSection('admin')">Admin Panel</button>
+            </div>
+
+            <div class="content">
+                <div class="user-info">
+                    <span>Welcome, <strong id="currentUser"></strong> (<span id="currentRole"></span>)</span>
+                    <button class="btn btn-danger" onclick="logout()">Logout</button>
+                </div>
+
+                <!-- Booking Section -->
+                <div id="bookingSection" class="section active">
+                    <h2>Book Your Ticket</h2>
+                    <div class="form-group">
+                        <label>Select Bus Route</label>
+                        <select id="busRoute" onchange="loadBusDetails()">
+                            <option value="">-- Select Route --</option>
+                        </select>
+                    </div>
+                    <div id="busDetailsSection" style="display: none;">
+                        <div class="booking-summary">
+                            <h3>Bus Details</h3>
+                            <p><strong>Route:</strong> <span id="selectedRoute"></span></p>
+                            <p><strong>Departure:</strong> <span id="selectedDeparture"></span></p>
+                            <p><strong>Price:</strong> ₱<span id="selectedPrice"></span></p>
+                            <p><strong>Available Seats:</strong> <span id="availableSeats"></span></p>
+                        </div>
+                        <h3 style="margin-top: 20px;">Select Your Seat</h3>
+                        <div class="seat-map" id="seatMap"></div>
+                        <div class="booking-summary">
+                            <h3>Booking Summary</h3>
+                            <p><strong>Selected Seats:</strong> <span id="selectedSeatsDisplay">None</span></p>
+                            <p><strong>Total Price:</strong> ₱<span id="totalPrice">0</span></p>
+                            <button class="btn btn-primary" onclick="confirmBooking()">Confirm Booking</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Bookings Section -->
+                <div id="myBookingsSection" class="section">
+                    <h2>My Bookings</h2>
+                    <div id="bookingsList"></div>
+                </div>
+
+                <!-- Schedule Section -->
+                <div id="scheduleSection" class="section">
+                    <h2>Bus Schedule</h2>
+                    <div class="bus-schedule" id="scheduleList"></div>
+                </div>
+
+                <!-- Admin Panel -->
+                <div id="adminSection" class="section">
+                    <h2>Admin Dashboard</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3 id="totalBookings">0</h3>
+                            <p>Total Bookings</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="totalRevenue">₱0</h3>
+                            <p>Total Revenue</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="totalPassengers">0</h3>
+                            <p>Total Passengers</p>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">Add New Bus Schedule</h3>
+                    <div class="form-group">
+                        <label>Route Name</label>
+                        <input type="text" id="newRoute" placeholder="e.g., Manila to Baguio">
+                    </div>
+                    <div class="form-group">
+                        <label>Departure Time</label>
+                        <input type="time" id="newDeparture">
+                    </div>
+                    <div class="form-group">
+                        <label>Price (₱)</label>
+                        <input type="number" id="newPrice" placeholder="Enter price">
+                    </div>
+                    <div class="form-group">
+                        <label>Total Seats</label>
+                        <input type="number" id="newSeats" value="40" placeholder="Number of seats">
+                    </div>
+                    <button class="btn btn-primary" onclick="addBusSchedule()">Add Schedule</button>
+
+                    <h3 style="margin-top: 40px;">All Bookings Report</h3>
+                    <table id="allBookingsTable">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Passenger</th>
+                                <th>Route</th>
+                                <th>Seats</th>
+                                <th>Price</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allBookingsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
